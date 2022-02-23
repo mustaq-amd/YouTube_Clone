@@ -2,7 +2,7 @@ import yt_clone_navbar from "./components/navbar.js";
 import {getData} from "./scripts/getData.js";
 
 
-const API_KEY="AIzaSyCoivpgeBqPbUO35P70SGhyDWNEAuUFrsc";
+const API_KEY="AIzaSyBmlAvBCKDp2Q7SblemYdfUo8zCTTCqn-Y";
 
 
 
@@ -36,21 +36,17 @@ logoIcon.forEach((element)=>{
 // getting data of most popular videos
 let mostPopularData=await getData(`https://youtube.googleapis.com/youtube/v3/videos?key=${API_KEY}&part=snippet&chart=mostPopular&regionCode=in&maxResults=20`);
 let mostPopularDataItems=mostPopularData.items;
-localStorage.setItem("mostPopularData",JSON.stringify(mostPopularData));
-//console.log(mostPopularDataItems);
 display_MostPopular_Videos_India(mostPopularDataItems);
-display_MostPopular_Videos_India();
+//display_MostPopular_Videos_India();
 
 
 //displaying data of most popular videos on home page default
 function display_MostPopular_Videos_India(data){
     console.log("data",data)
     data.forEach(element => {
-        //console.log("element",element)
 
         const{snippet:{thumbnails : {high}}}=element;
         const{snippet:{localized : {title}}}=element;
-
         const{snippet:{channelTitle}}=element;
 
         let card=document.createElement("div");
@@ -86,7 +82,6 @@ function display_MostPopular_Videos_India(data){
        
         card.append(thumbnail,details);
         card.addEventListener("click",()=>{
-            console.log("clciked")
             navigateToVideoPage(element.id);
 
         });
@@ -100,20 +95,22 @@ function display_MostPopular_Videos_India(data){
 
 async function getChannelImage(channelId){
     let channelDetails=await getData(`https://youtube.googleapis.com/youtube/v3/search?key=${API_KEY}&part=snippet&channelId=${channelId}&type=channel`);
+    console.log("channelDetails",channelDetails)
     let res=getImgUrl(channelDetails.items);
     return res;
 
 }
 
 function getImgUrl(data){
+    console.log("getImageUrl",data)
 
     let imgURL;
-    data.forEach(element => {
+    // data.forEach(element => {
 
-        const{snippet:{thumbnails : {high:{url}}}}=element;
-        imgURL=url;
+        //const{snippet:{thumbnails : {high:{url}}}}=data;
+        imgURL=data[0].snippet.thumbnails.high.url;
 
-    });
+    // });
     return imgURL;
 
 }
@@ -126,18 +123,49 @@ async function searchVideosByparam(){
 
 
 function displaySearchVideos(items){
+    console.log("searchitems",items)
     document.getElementById("yt-video-container").innerHTML="";
     items.forEach(element => {
 
         const{snippet:{thumbnails : {high}}}=element;
+        const{snippet:{title}}=element;
+        const{snippet:{channelTitle}}=element;
 
         let card=document.createElement("div");
-        let image=document.createElement("img");
-        image.src=high.url;
-        card.append(image);
 
+        let thumbnail=document.createElement("img");
+        thumbnail.src=high.url;
+
+        let details=document.createElement("div");
+
+        let cImage=document.createElement("img");
+        cImage.id="channelImage"
+        let cId=element.snippet.channelId;
+        let channelImage=getChannelImage(cId)
+        channelImage.then(function(res){
+            cImage.src=res;
+        })
+
+        let title_div=document.createElement("div");
+        let vTitle=document.createElement('p');
+        vTitle.innerText=compressText(title);
+        vTitle.id="thumb-title"
+        
+
+        let cTitle=document.createElement('p');
+        cTitle.innerText=channelTitle;
+        cTitle.id="channel-title"
+      
+
+        title_div.append(vTitle,cTitle);
+       
+        details.append(cImage,title_div);
+        details.id="thumb-details";
+       
+        card.append(thumbnail,details);
         card.addEventListener("click",()=>{
             navigateToVideoPage(element.id.videoId);
+
 
         });
         document.getElementById("yt-video-container").append(card);

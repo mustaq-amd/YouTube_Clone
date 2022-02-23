@@ -39,27 +39,72 @@
 
     <style>
       #video-play-container {
-        padding: 20px 50px 0 50px;
+        /* padding: 20px 50px 0 50px; */
         background-color: #f9f9f9;
       }
       .offcanvas-start {
         width: 250px;
+      }
+      #yt-video-container {
+        /* border: 1px solid red; */
+        display: flex;
+        justify-content: space-between;
+        background-color: #f9f9f9;
+      }
+      #video-play-container {
+        width: 58%;
+        /* border: 1px solid teal; */
+        margin-top: 30px;
+      }
+      #related-video-container {
+        width: 38%;
+        /* border: 1px solid tomato; */
+        display: flex;
+        flex-direction: column;
+        margin-top: 30px;
+      }
+      #vFrame {
+        margin-left: 77px;
+      }
+      #related-video-box {
+        display: flex;
+        /* border: 1px solid red; */
+        justify-content: space-between;
+        width: 85%;
+        height: 100px;
+        margin-bottom: 10px;
+      }
+      #related-video-box > img {
+        width: 45%;
+        margin-right: 20px;
+      }
+      #thumb-title {
+        font-weight: 500;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      #channel-title {
+        color: grey;
+        font-size: 13px;
       }
     </style>
   </head>
   <body>
     <div id="main-container">
       <div id="yt-home-navbar"></div>
-      <div id="video-play-container">
-        <iframe
-          id="vFrame"
-          width="560"
-          height="315"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+      <div id="yt-video-container">
+        <div id="video-play-container">
+          <iframe
+            id="vFrame"
+            width="650"
+            height="360"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div id="related-video-container"></div>
       </div>
     </div>
   </body>
